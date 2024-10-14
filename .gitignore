@@ -1,6 +1,5 @@
 # Build artifacts
-/src/*.o
-/src/*.x
+/build/
 
 # Editors
 /.vscode/
