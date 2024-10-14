@@ -1,0 +1,11 @@
+# Build artifacts
+/src/*.o
+/src/*.x
+
+# Editors
+/.vscode/
+.*.sw?
+
+# OS cruft
+Thumbs.db
+.DS_Store
