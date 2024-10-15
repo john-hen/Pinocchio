@@ -191,7 +191,7 @@ int compute_fmax(void)
 
   cputime.io+=MPI_Wtime()-cputmp;
 
-  if (finalize_fftw())
+  if (finalize_fft())
     return 1;
 
   cputime.fmax = MPI_Wtime() - cputime.fmax;

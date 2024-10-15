@@ -38,7 +38,7 @@
 #include <gsl/gsl_integration.h>
 #include <gsl/gsl_odeiv.h>
 #include <gsl/gsl_spline.h>
-#include <fftw3-mpi.h>
+#include <heffte.h>
 
 #define NYQUIST 1.
 #define PI      3.14159265358979323846 
@@ -110,12 +110,17 @@ typedef struct
   unsigned int total_local_size,total_local_size_fft;
   unsigned int off;
   double lower_k_cutoff, upper_k_cutoff, norm, BoxSize, CellSize;
-  fftw_plan forward_plan, reverse_plan;
+  heffte_plan fft_plan;
 } grid_data;
 extern grid_data *MyGrids;
 
-extern fftw_complex **cvector_fft;
-extern double **rvector_fft;
+typedef struct {
+    double re;
+    double im;
+} complex;
+
+extern complex **cvector_fft;
+extern double  **rvector_fft;
 
 #ifdef SCALE_DEPENDENT_GROWTH
 typedef struct
@@ -269,12 +274,11 @@ extern mf_data mf;
 int compute_collapse_times(int);
 int compute_velocities(int);
 
-/* prototypes for functions defined in fmax-fftw.c */
+/* prototypes for functions defined in fmax-heffte.c */
 int set_one_grid(int);
-int initialize_fft();
 double forward_transform(int);
 double reverse_transform(int);
-int finalize_fftw();
+int finalize_fft();
 int compute_derivative(int, int, int);
 void write_in_cvector(int, double *);
 void write_from_cvector(int, double *);

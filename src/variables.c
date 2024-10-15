@@ -53,8 +53,8 @@ smoothing_data Smoothing;
 grid_data *MyGrids;
 int Ngrids;
 
-fftw_complex **cvector_fft;
-double **rvector_fft;
+complex ** cvector_fft;
+double  ** rvector_fft;
 
 param_data params={0};
 output_data outputs;

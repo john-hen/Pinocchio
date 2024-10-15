@@ -47,7 +47,7 @@ int allocate_main_memory()
 
      first_derivatives and density will share the same memory as second_derivatives
 
-     these will be allocated by fftw routines:
+     These will be allocated by FFT routines:
 
      cvector_fft         1 double = 8              MyGrids[*].total_local_size_fft
      rvector_fft         1 double = 8              MyGrids[*].total_local_size_fft
@@ -70,7 +70,7 @@ int allocate_main_memory()
 
      seedtable           1 int = 4                 MyGrids[*].GSglobal_x * MyGrids[*].GSglobal_y
 
-     these will be allocated by fftw routines:
+     These will be allocated by FFT routines:
 
      cvector_fft         1 double = 8              MyGrids[*].total_local_size_fft
      rvector_fft         1 double = 8              MyGrids[*].total_local_size_fft
@@ -84,16 +84,17 @@ int allocate_main_memory()
      checked with an estimate of the number of halos.
 
      prods_memory:            memory needed by fmax products
-     first_allocated_memory:  memory needed by fmax, exluding fftw vectors
-     fft_memory:              memory needed by fftw vectors
-     fmax_memory:             memory needed by fmax, including fftw vectors 
+     first_allocated_memory:  memory needed by fmax, exluding FFT vectors
+     fft_memory:              memory needed by FFT vectors
+     fmax_memory:             memory needed by fmax, including FFT vectors 
      frag_prods_memory:       memory needed by fragment products
      group_memory:            memory needed by group catalogs
      frag_memory:             memory needed by fragment
      all_memory:              total memory needed
 
      IN CASE DO_NOT_REALLOC IS DEFINED:
-     first_allocated_memory is large enough to include frag_memory, fftw vectors are an extra overhead
+     first_allocated_memory is large enough to include frag_memory,
+     FFT vectors are an extra overhead.
 
    */
 
@@ -276,11 +277,11 @@ int allocate_main_memory()
       memory += MyGrids[igrid].GSglobal_x * MyGrids[igrid].GSglobal_y * sizeof(unsigned int);
     }
 
-  /* allocates fftw vectors */
+  /* allocates FFT vectors */
   for (igrid=0; igrid<Ngrids; igrid++)
     {
-      rvector_fft[igrid] = fftw_alloc_real(MyGrids[igrid].total_local_size_fft);
-      cvector_fft[igrid] = fftw_alloc_complex(MyGrids[igrid].total_local_size_fft/2);
+      rvector_fft[igrid] = malloc(MyGrids[igrid].total_local_size_fft * sizeof(double));
+      cvector_fft[igrid] = malloc(MyGrids[igrid].total_local_size_fft/2 * sizeof(complex));
       if (rvector_fft[igrid] == 0x0 || cvector_fft[igrid] == 0x0)
 	{
 	  printf("ERROR on taks %d: I cannot allocate memory for fft vectors\n", ThisTask);
@@ -399,8 +400,8 @@ int allocate_main_memory()
 int deallocate_fft_vectors(int ThisGrid)
 {
 
-  fftw_free(cvector_fft[ThisGrid]);
-  fftw_free(rvector_fft[ThisGrid]);
+  free(cvector_fft[ThisGrid]);
+  free(rvector_fft[ThisGrid]);
 
   return 0;
 }

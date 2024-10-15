@@ -98,10 +98,6 @@ int initialization()
   if (allocate_main_memory())
     return 1;
 
-  /* initialization of fft plans */
-  if (initialize_fft())
-    return 1;
-
   /* generation of initial density field */
   if (generate_densities())
     return 1;
@@ -376,9 +372,10 @@ int set_grids()
   MyGrids[0].lower_k_cutoff=0.;
   MyGrids[0].upper_k_cutoff=NYQUIST * PI;
 
-  /* allocates pointers */
-  cvector_fft=(fftw_complex**)malloc(Ngrids * sizeof(fftw_complex*));
-  rvector_fft=(double**)malloc(Ngrids * sizeof(double*));
+  // Allocate the points to the FFT input output array.
+  // The actual arrays will be allocated in allocate_main_memory().
+  cvector_fft = (complex**) malloc(Ngrids * sizeof(complex*));
+  rvector_fft = (double**)  malloc(Ngrids * sizeof(double*));
 
   kdensity=(double**)malloc(Ngrids * sizeof(double*));
   density=(double**)malloc(Ngrids * sizeof(double*));

@@ -51,7 +51,7 @@ CFLAGS_MEMTEST = -fsanitize=address -g -Wall -fno-omit-frame-pointer
 override INC +=
 
 # Specify the external libraries we depend on.
-override LIB += -lfftw3_mpi -lfftw3 -lgslcblas -lgsl -lm
+override LIB += -lheffte -lgslcblas -lgsl -lm
 
 # Define install target using variable names as per the GNU coding standards.
 # Installing Pinocchio is not necessary, as we can just call the executable
